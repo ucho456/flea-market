@@ -1,8 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { ItemStatus } from './item-status.enum';
+import { Item } from './item.model';
 
 @Injectable()
 export class ItemsService {
-  findAll() {
-    return 'This is ItemsService';
+  private items: Item[] = [];
+
+  findAll(): Item[] {
+    return this.items;
+  }
+
+  findById(id: string): Item {
+    return this.items.find((i) => i.id === id);
+  }
+
+  create(item: Item): Item {
+    this.items.push(item);
+    return item;
+  }
+
+  updateStatus(id: string): Item {
+    const item = this.findById(id);
+    item.status = ItemStatus.SOLD_OUT;
+    return item;
+  }
+
+  delete(id: string): void {
+    this.items.filter((i) => i.id !== id);
   }
 }
